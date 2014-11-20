@@ -1,3 +1,8 @@
+"""
+    Usage: python populate_rango.py
+
+    This is using for initializing data
+"""
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
 
