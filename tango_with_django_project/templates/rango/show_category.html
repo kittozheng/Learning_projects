@@ -1,6 +1,5 @@
-{% extends 'rango/base.html'%}
 
-{% load static %}
+{% extends 'rango/base.html'%}
 
 {% block title %}Show Category{% endblock %}
 {% block body_block %}
@@ -11,7 +10,7 @@
        			<h1>Rango says... hello world!</h1>
         	</div>
 	{% endif %}
-    <img src="{% static "images/fire.jpg" %}" alt="Picture of Fire" />
+
 	<div class="row placeholders">
             <div class="col-xs-12 col-sm-2 placeholder">
 	        {% if categories %}
@@ -22,5 +21,7 @@
 	            </ul>
 	        {% endif %}
 	 <hr>
-        <h5><a href={% url 'add_category' %}>add category</a></h5>
+        <h5><a href="{ url 'add_category' }">add category</a></h5>
+	     </div>
+	 </div>
 {% endblock%}

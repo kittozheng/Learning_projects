@@ -1,14 +1,16 @@
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 
 from rango.models import Category, Page
 from rango.forms import UserForm, UserProfileForm,\
                         CategoryForm, PageForm
+from rango.decorators import login_required
 
 from datetime import datetime
+
 
 # Create your views here.
 
@@ -75,12 +77,13 @@ def user_logout(request):
 def restricted(request):
     return HttpResponse("Since you're logged in, you can see this text")
 
+@login_required
 def index(request): 
     context = dict(user=request.user)
     
     category_list = Category.objects.all()
     page_list = Page.objects.order_by('-views')[:5]
-    context.update(dict(categories=category_list, pages=page_list))
+    context.update(dict(categories=category_list, pages=page_list,profile=request.user))
 
     # cookie
     # visits = int(request.COOKIES.get('visits', '0'))
@@ -122,11 +125,13 @@ def index(request):
     response = render_to_response('rango/index.html',  context)
     return response
 
+@login_required
 def about(request):
     contact = "kittozhengszu@gmail.com"
     context = dict(user=request.user, contact=contact,profile=request.user,)
     return render_to_response('rango/index.html', context)
 
+@login_required
 def show_category(request):
     category_list = Category.objects.order_by('name')[:5].values('name')
     context = dict(categories=category_list, 
@@ -135,6 +140,7 @@ def show_category(request):
     context.update(csrf(request))
     return render_to_response("rango/show_category.html", context)
 
+@login_required
 def category(request, category_name_slug):
     context = dict()
     try:
@@ -153,6 +159,7 @@ def category(request, category_name_slug):
 
     return render_to_response('rango/category.html', context)
 
+@login_required
 def add_category(request):
 
     if request.method == 'POST':
@@ -170,6 +177,7 @@ def add_category(request):
     context.update(csrf(request))
     return render_to_response('rango/add_category.html', context)
 
+@login_required
 def add_page(request, category_name_slug):
     try:
         cat = Category.objects.get(name = category_name_slug)
