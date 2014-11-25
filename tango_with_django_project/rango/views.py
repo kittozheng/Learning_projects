@@ -1,16 +1,15 @@
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login, logout
-# from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.db.models import Count
+from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 
 from rango.models import Category, Page
-from rango.forms import UserForm, UserProfileForm,\
-                        CategoryForm, PageForm
+from rango.forms import UserForm, UserProfileForm,CategoryForm, PageForm
 from rango.decorators import login_required
+from rango.bing_search import run_query
 
 from datetime import datetime
-
 
 # Create your views here.
 
@@ -143,9 +142,17 @@ def show_category(request):
 @login_required
 def category(request, category_name_slug):
     context = dict()
+    context.update(dict(result_list=None, query=None))
+
+    if request.method == "POST":
+        query = request.POST['query'].strip()
+        if query:
+            query = query.strip()
+            result_list = run_query(query)
+            context.update(result_list=result_list,query=query)
     try:
         category = Category.objects.get(name=category_name_slug)
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
         admin = Page.objects.get(category=Category.objects.get(name='Admin'))
         
         context.update(dict(category_name=category.name,
@@ -157,6 +164,10 @@ def category(request, category_name_slug):
     except Category.DoesNotExist:
         pass
 
+    if not context['query']:
+        context.update(dict())
+
+    print "*"*10
     return render_to_response('rango/category.html', context)
 
 @login_required
@@ -198,10 +209,72 @@ def add_page(request, category_name_slug):
         form = PageForm()
 
     context = dict(form=form,
-                                profile=request.user, 
-                                category=cat, 
-                                category_name_url=category_name_slug,)
+                profile=request.user,
+                category=cat,
+                category_name_url=category_name_slug,)
     context.update(csrf(request))
     
     return render_to_response('rango/add_page.html', context)
                 
+@login_required
+def track_url(request):
+    url = '/rango/'
+    if request.method == 'GET':
+        page_id = request.GET.get('page_id', None)
+        try:
+            page = Page.objects.get(id=page_id)
+            page.views = page.views + 1
+            page.save()
+            url = page.url
+        except:
+            pass
+    return redirect(url)
+
+@login_required
+def search(request):
+    if request.method == "POST":
+        query = request.POST.get('query', None)
+        context = dict()
+        if query:
+            query = query.strip()
+            result_list = run_query(query)
+            context.update(dict(result_list=result_list))
+        return render_to_response('rango/search.html', context)
+
+@login_required
+def like_category(request):
+    if request.method == "GET":
+        profile = request.user
+        cat_id = int(request.GET.get('category_id', None))
+        likes = 0
+        if cat_id:
+            try:
+                cat = Category.objects.get(id=cat_id)
+                cat.likes = cat.likes + 1
+                cat.save()
+                likes = cat.likes
+            except:
+                pass
+        return HttpResponse(likes)
+
+def get_category_list(max_results=0, start_with=''):
+    cat_list = []
+    if start_with:
+        cat_list = Category.objects.filter(name__istartwith=start_with)
+    if max_results > 0:
+        if Count(cat_list) > max_results:
+            cat_list = cat_list[:max_results]
+
+    return cat_list
+
+@login_required
+def suggest_category(request):
+    start_with = ''
+    if request.method == 'GET':
+        start_with = request.GET.get('suggestion', None)
+    cat_list = get_category_list(8, start_with)
+    context = dict(cat_list=cat_list)
+
+    print cat_list
+    return render_to_response('rango/category_list.html', context)
+

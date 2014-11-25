@@ -1,15 +1,19 @@
 {% extends "rango/base.html" %}
 {% load static %}
+{% load staticfiles %}
 
 {% block title %}Home{% endblock %}
 {% block body_block %}
+    <style>
+        .placeholders.test{test-align: left;}
+    </style>
         {% if user.is_authenticated %}
         <div class="page-header">
-        <h1>Pakho says... hello {{ user.username }}!</h1>
+        <h1>Pakho says... hello {{ user.username }} :)</h1>
         {% else %}
-        <h1>Pakho says... hello world!</h1>
+        <h1>Pakho says... hello world! :)</h1>
         {% endif %}
-        <h1>Welcome to Pakho's World</h1>
+        <h1>Welcome to Pakho's World :)</h1>
         </div>
         <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango" /> 
         <hr>
@@ -19,6 +23,7 @@
                     <h3 class="panel-title">Categories</h3>
             </div>
         </div>
+
         <div class="row placeholders">
             <div class="col-xs-12 col-sm-2 placeholder">
             {% if categories %}
@@ -29,7 +34,7 @@
                 </ul>
             {% endif %}
             </div>
-     </div> 
+        </div>
 
     <div class="panel panel-primary">
             <div class="panel-heading">
@@ -39,33 +44,29 @@
     <div class="row placeholders">
         <div class="col-xs-12 col-sm-4 placeholder">
         {% if pages %}
-            <ul>
-                {% for page in pages %}
-                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                {% endfor %}
-            </ul>
+            {% for page in pages %}
+                <ul>
+                    <li>
+                    <a href="{% url 'goto' %}?page_id={{ page.id }}">{{ page.title }}</a>
+                    {% if page.views > 1 %}
+                        ({{ page.views }} views)
+                        {% elif page.views == 1 %}
+                        ({{ page.views }} view)
+                    {% endif %}
+                    </li>
+                </ul>
+            {% endfor %}
         {% endif %}
         </div>
     </div>     
 
-
-     <hr>
-{#        <!-- <h5><a href="{ url 'add_category' }">add category</a></h5>            #}
-{#            {% if contact %}#}
-{#                <h1>Contact me:  {{contact}}</h1>#}
-{#                <a href="{%url 'index'%}">Go back to Index</a>#}
-{#            {% else %}#}
-{#                <a href="{%url 'show_category'%}">Show category</a><br>#}
-{#                <a href="{%url 'about'%}">contact me</a><br />                #}
-{#                <a href="{%url 'restricted'%}">Restricted Page</a><br />#}
-{#                <a href="{%url 'auth_logout'%}">Logout</a><br />#}
-{#                #}
-{#            {% endif%}#}
-{#        {% else %}#}
-{#        <h1>Pakho says... hello world!</h1>#}
-{#        <a href="{%url 'auth_login'%}">Login</a>#}
-{#        <a href="{%url 'registration_register'%}">Register</a><br/>        #}
-{#        {% endif %} -->#}
-{#        <!-- hello guys! <strong>{{ boldmessage }}</strong><br /> -->#}
+    <hr>
         <p> visits: {{ visits }}</p>
+    <button onclick="alert('You clicked the button using JavaScript')">
+        Click Me - I run JavaScript
+    </button>
+    <button id="about-btn"> Click Me - I'm Javascript on Speed</button>
+    <div id="msg">Hello</div>
+    <button id="test-btn"> fuck Me</button>
 {% endblock %}
+

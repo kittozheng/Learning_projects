@@ -4,27 +4,62 @@
 
 {% block title %}{{ category_name }}{% endblock %}
 {% block body_block %}
-        <h1>{{ category_name }}</h1>
-        <img src="{% static "images/kakaxi.jpg" %}" alt="Picture of Fire" />
+        <h1>{{ category_name }}
+            <form class="form-inline" id="category_form" method="post" action="{% url 'category' category.name %}">
+                 {% csrf_token %}
+                 <input class="form-control" type="text" size="50" name="query" value="{{query}}" id="query" />
+                 <input class="btn btn-primary" type="submit" name="submit" value="Search" />
+            </form>
+        </h1>
+        <hr>
+        {% if not result_list %}
+            <img src="{% static "images/kakaxi.jpg" %}" alt="Picture of Fire" /></br>
+        {% endif %}
+
         {% if category %}
             <h2>{{ category_name }}'s Pages:</h2>
+            <p>
+                <b id="like_count">{{ category.likes }}</b> people like this category
+                <button id="likes" data-catid="{{ category.id }}" class="btn btn-primary" type="button">
+                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                    Like
+                </button>
+            </p>
             {% if pages %}
-            <ul>
-                <div class="row placeholders">
-                        <div class="col-xs-12 col-sm-2 placeholder">                
-                        {% for page in pages %}
-                            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                        {% endfor %}
+                {% for page in pages %}
+                    <li>
+                        <a href="{% url 'goto' %}?page_id={{ page.id }}">{{ page.title }}</a>
+                        {% if page.views > 1 %}
+                            ({{ page.views }} views)
+                            {% elif page.views == 1 %}
+                            ({{ page.views }} view)
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                <div class="panel">
+                {% if result_list %}
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Results</h3>
+                        <!-- Display search results in an ordered list -->
+                        <div class="panel-body">
+                        <div class="list-group">
+                            {% for result in result_list %}
+                                <div class="list-group-item">
+                                    <h4 class="list-group-item-heading"><a href="{{ result.link }}">{{ result.title }}</a></h4>
+                                    <p class="list-group-item-text">{{ result.summary }}</p>
+                                </div>
+                            {% endfor %}
                         </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <h4><a href="/rango/category/{{category_name}}/add_page/">Add Page</a></h4>
                 </div>
-            </ul>
-            <h4><a href="/rango/category/{{category_name}}/add_page/">Add Page</a></h4> 
-            <h4><a href="{% url 'show_category'%}">Back</a></h4></br>
             {% else %}
                 <strong>No pages currently in category.</strong></br>
             {% endif %}
         {% else %}
             The specified category {{ category_name }} does not exist!
-        {% endif %}        
+        {% endif %}      
 {% endblock %}
     
