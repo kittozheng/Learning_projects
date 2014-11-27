@@ -3,8 +3,9 @@
   <component name="DataSourceManagerImpl" format="xml" hash="1614523456">
     <data-source source="LOCAL" name="Django default" uuid="7a3f592e-b50a-4cda-87aa-bac7d43e719b">
       <driver-ref>sqlite.xerial</driver-ref>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db.sqlite3</jdbc-url>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://127.0.0.1:3306/rango</jdbc-url>
+      <user-name>root</user-name>
       <libraries />
     </data-source>
   </component>

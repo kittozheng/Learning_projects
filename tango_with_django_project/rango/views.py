@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db.models import Count
 from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.template import RequestContext
 
 from rango.models import Category, Page
 from rango.forms import UserForm, UserProfileForm,CategoryForm, PageForm
@@ -141,6 +142,7 @@ def show_category(request):
 
 @login_required
 def category(request, category_name_slug):
+
     context = dict()
     context.update(dict(result_list=None, query=None))
 
@@ -160,15 +162,13 @@ def category(request, category_name_slug):
                             pages=pages,
                             admin=admin,
                             profile=request.user,))
-        context.update(csrf(request))
     except Category.DoesNotExist:
         pass
 
     if not context['query']:
         context.update(dict())
 
-    print "*"*10
-    return render_to_response('rango/category.html', context)
+    return render_to_response('rango/category.html', context, context_instance=RequestContext(request))
 
 @login_required
 def add_category(request):
