@@ -35,7 +35,7 @@ class AuthController extends BaseController {
 				return Redirect::route('admin.pages.index');
 			}
 		}catch(\Exception $e){
-			return Redirect::route('<admin class="lo"></admin>gin')->withErrors(array('login' => $e->getMessage()));
+			return Redirect::route('admin.login')->withErrors(array('login' => $e->getMessage()));
 		}
 	}
 

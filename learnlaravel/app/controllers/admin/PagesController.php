@@ -162,7 +162,7 @@ class PagesController extends \BaseController {
 						$page->user_id = Sentry::getUser()->id;
             $page->save();
  
-            Notification::success('新增页面成功！');
+            Notification::success('Add Page！');
  
             return Redirect::route('admin.pages.edit', $page->id);
         }
@@ -187,7 +187,7 @@ class PagesController extends \BaseController {
 						$page->user_id = Sentry::getUser()->id;
             $page->save();
 
-            Notification::success('更新页面成功！');
+            Notification::success('Update Page');
 
             return Redirect::route('admin.pages.edit', $page->id);
         }
@@ -200,7 +200,7 @@ class PagesController extends \BaseController {
         $page = Page::find($id);
         $page->delete();
 
-        Notification::success('删除成功！');
+        Notification::success('Delete Page');
         return Redirect::route('admin.pages.index');
     }
 
