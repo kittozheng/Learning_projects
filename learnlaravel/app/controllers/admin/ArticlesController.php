@@ -65,7 +65,7 @@ class ArticlesController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		return \View::make('admin.articles.show')->with('article', Article::find($id));
+		return \View::make('admin.articles.show')->with('article', Article::find($id))->withAuthor(Sentry::findUserById(Article::find($id)->user_id)->name);
 	}
 
 	/**
@@ -77,7 +77,7 @@ class ArticlesController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		return \View::make('admin.articles.edit')->with('articles', Article::find($id));
+		return \View::make('admin.articles.edit')->with('article', Article::find($id));
 	}
 
 	/**
@@ -93,19 +93,20 @@ class ArticlesController extends \BaseController {
 
 		if($validation->passes()){
 			$article 			= 	Article::find($id);
-			$article->title 		=	Input::get('title');
+			$article->title 		= 	Input::get('title');
 			$article->body 		= 	Input::get('body');
 			$article->image 		= 	Input::get('image') ;
-			$article->user_id	=	Sentry::getUser()->id;
+			$article->user_id		= 	Sentry::getUser()->id;
 
 			$article->save();
-		
-			Notification::success("Article Update!");
+
+			Notification::success("Article updated!");
 
 			return Redirect::route('admin.articles.edit', $article->id);
 		}
 
 		return Redirect::back()->withInput()->withErrors($validation->errors);
+		
 	}
 
 	/**
@@ -122,7 +123,7 @@ class ArticlesController extends \BaseController {
 
 		Notification::success('article deleted!');
 
-		return Redirect::route('admin.article.index');
+		return Redirect::route('admin.articles.index');
 	}
 
 }
