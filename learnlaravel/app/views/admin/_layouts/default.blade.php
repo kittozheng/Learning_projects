@@ -1,4 +1,4 @@
-< !doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -24,7 +24,7 @@
 
 		<hr>
 
-		@yield('main')
+	@yield('main')
 		
 	</div>
 </body>
