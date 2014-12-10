@@ -9,7 +9,7 @@ class AuthController extends BaseController {
 	/**
 	 *
 	 * Show login page
-	 * @return Response
+	 * @return View
 	 */
 	public function getLogin()
 	{

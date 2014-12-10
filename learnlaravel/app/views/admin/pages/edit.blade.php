@@ -2,35 +2,35 @@
 
 @section('main')
 
-    <h2>Update Page</h2>
+	<h2>Update Page</h2>
 
-    {{ Notification::showAll() }}
+	{{ Notification::showAll() }}
 
-    @if ($errors->any())
-        <div class="alert alert-error">
-            {{ implode('<br>', $errors->all()) }}
-        </div>    
-    @endif
+	@if ($errors->any())
+		<div class="alert alert-error">
+			{{ implode('<br>', $errors->all()) }}
+		</div>    
+	@endif
 
-    {{ Form::model($page, array('method'=>'input', 'route'=>array('admin.pages.update', $page->id))) }}
-        <div class="control-group">
-            {{ Form::label('title', 'Title') }}
-            <div class="controls">
-                {{ Form::text('title') }}
-            </div>
-        </div>
+	{{ Form::model($page, array('method'=>'put', 'route'=>array('admin.pages.update', $page->id))) }}
+		<div class="control-group">
+			{{ Form::label('title', 'Title') }}
+			<div class="controls">
+				{{ Form::text('title') }}
+			</div>
+		</div>
 
-        <div class="control-group">
-            {{ Form::label('body', 'content') }}
-            <div class="controls">
-                {{ Form::textarea('body') }}
-            </div>
-        </div>
+	<div class="control-group">
+		{{ Form::label('body', 'content') }}
+		<div class="controls">
+			{{ Form::textarea('body') }}
+		</div>
+	</div>
 
-        <div class="form-actions">
-            {{ Form::submit('Update', array('class' => 'btn btn-success btn-save btn-large')) }}
-            <a href="{{URL::route('admin.pages.index') }}" class="btn btn-large">Cancle</a>
-        </div>  
+	<div class="form-actions">
+		{{ Form::submit('Update', array('class' => 'btn btn-success btn-save btn-large')) }}
+		<a href="{{URL::route('admin.pages.index') }}" class="btn btn-large">Cancle</a>
+	</div>  
 
-    {{ Form::close()}}
+	{{ Form::close()}}
 @stop

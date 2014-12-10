@@ -8,7 +8,7 @@
 
 	@if($errors->has('login'))
 
-		<div class="alert alert-error">{{ $errors->first('login', 'message')}}</div>
+		<div class="alert alert-error">{{ $errors->first('login', 'Invalid Parameters!') }}</div>
 	
 	@endif
 
@@ -37,8 +37,10 @@
 	<div class="form-actions">
 
 		{{ Form::submit('Login', array('class' => 'btn btn-inverse btn-logon')) }}
-		
+
 	</div>
+
+
 
 	{{ Form::close() }}
 
