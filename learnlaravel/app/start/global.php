@@ -53,6 +53,16 @@ App::error(function(Exception $exception, $code)
 
 /*
 |--------------------------------------------------------------------------
+| Custome Application Error Handler
+|--------------------------------------------------------------------------
+*/
+App::error(function(InvalidUserException $exception){
+	Log::error($exception);
+	return 'Sorry! Somthing is wrong with this account';
+});
+
+/*
+|--------------------------------------------------------------------------
 | Maintenance Mode Handler
 |--------------------------------------------------------------------------
 |

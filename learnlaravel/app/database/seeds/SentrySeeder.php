@@ -20,7 +20,7 @@ class SentrySeeder extends Seeder{
 	 		'permissions'	=>	['admin'=>1],
 	 	));
 
-	 	// Add user to grooup
+	 	// Add user to group
 	 	$adminUser =  Sentry::getUserProvider()->findByLogin('kittozhengszu@gmail.com');
 	 	$adminGroup =  Sentry::getGroupProvider()->findByName('Admin');
 	 	$adminUser->addGroup($adminGroup);

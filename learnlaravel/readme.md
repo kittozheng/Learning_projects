@@ -1,25 +1,35 @@
-## Laravel PHP Framework
+Laravel
+===
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+A simple blog application developed with PHP/[Laravel](http://laravel.com)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.
+## Requirement
 
-Laravel aims to make the development process a pleasing one for the developer without sacrificing application functionality. Happy developers make the best code. To this end, we've attempted to combine the very best of what we have seen in other web frameworks, including frameworks implemented in other languages, such as Ruby on Rails, ASP.NET MVC, and Sinatra.
+* Apache Web Server
+* PHP 5.3.2 or above
+* Laravel 4
+* MySQL
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## Plugin
+* cartalyst/sentry
+* edvinaskrucas/notification
+* fzaninotto/faker
+* way/generators
 
-## Official Documentation
+## Installation
 
-Documentation for the entire framework can be found on the [Laravel website](http://laravel.com/docs).
+1. Create Database, make sure to update the database configuration  'app/config/database.php' same with your MySQL configuration
+2. Create Sentry Tables for auth system, run the command 'php artisan migrate --package=cartalyst/sentry'
+3. Create application tables, run the command 'php artisan migrate:make create_article_table --create=articles' to generate migration file, which you could add fields of the table, for creating table with the command 'php artisan migrate'.
+4. Create model, which you could manage the model fields.Run the command ' php artisan generate:model article'
+5. Generate fake data for testing. I suggest you to use the plugins 'Faker\Factory' and 'way/generators'. Run the command 'php artisan generate:seed article' to generate seed file, and update the seed file like below:
+	'Article::create([   
+	     'title'   => $faker->sentence($nbWords = 5),  
+	     'slug'    => 'first-post',   
+	     'body'    => $faker->paragraph($nbSentences = 5),   
+	     'user_id' => 1,
+	]);'
+update DatabaseSeeder.php to register seed file with the code '$this->call('ArticleTableSeeder');'
+6. Here to run: 'php artisan serve --port=8080'.
 
-### Contributing To Laravel
 
-**All issues and pull requests should be filed on the [laravel/framework](http://github.com/laravel/framework) repository.**
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
