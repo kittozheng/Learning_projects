@@ -32,6 +32,7 @@ A simple blog application developed with PHP/[Laravel](http://laravel.com)
 		     'user_id' => 1,
 		]);
 
-8. register seed file with the code `$this->call('ArticleTableSeeder');` in DatabaseSeeder.php, and run: `php artisan serve --port=8080`.
+8. register seed file with the code `$this->call('ArticleTableSeeder');` in DatabaseSeeder.php, and run: `composer dump-autoload`.
+9. Run the project with command 'php artisan --port=8080'
 
 
