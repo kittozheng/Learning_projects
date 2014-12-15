@@ -51,6 +51,11 @@ def populate():
         title="Flask",
         url="http://flask.pocoo.org")
 
+    admin_cat = add_cat("Admin")
+    
+    add_page(cat=admin_cat,
+            title="Admin",
+            url="http://localhost:8081/admin/")
     # Print out what we have added to the user.
     for c in Category.objects.all():
         for p in Page.objects.filter(category=c):

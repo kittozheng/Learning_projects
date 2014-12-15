@@ -155,13 +155,16 @@ def category(request, category_name_slug):
     try:
         category = Category.objects.get(name=category_name_slug)
         pages = Page.objects.filter(category=category).order_by('-views')
+        print pages
         admin = Page.objects.get(category=Category.objects.get(name='Admin'))
-        
+        print admin
+
         context.update(dict(category_name=category.name,
                             category=category,
                             pages=pages,
                             admin=admin,
                             profile=request.user,))
+        print context
     except Category.DoesNotExist:
         pass
 
