@@ -14,3 +14,12 @@ $('#suggestion').keyup(function () {
         $('#cats').html(data);
     });
 });
+
+$('#add_page').click(function(){
+    var catename;
+    catname = $(this).attr("data-catname");
+    console.log(catname);
+    $.get('/rango/category/'+catname+'/add_page/', function(data){
+        console.log(data);
+    });
+});

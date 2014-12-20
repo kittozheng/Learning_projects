@@ -3,6 +3,9 @@
 
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+
 from rango.models import UserProfile, Page, Category
 
 class UserForm(forms.ModelForm):
@@ -18,7 +21,10 @@ class UserProfileForm(forms.ModelForm):
         fields = ('website', 'picture',)
 
 class CategoryForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="Please enter the categpry name")
+    name_regex = [RegexValidator(ur'^[a-zA-Z0-9\u4e00-\u9fa5]*$',
+                                 message="Alpha, chinese and number are supported!")]
+
+    name = forms.CharField(validators=name_regex,max_length=128, help_text="Please enter the categpry name")
     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -28,7 +34,10 @@ class CategoryForm(forms.ModelForm):
         fileds = ('name',)
 
 class PageForm(forms.ModelForm):
-    title = forms.CharField(max_length=128, help_text="Please enter the title")
+    title_regex = [RegexValidator(ur'^[a-zA-Z0-9\u4e00-\u9fa5]*$',
+                                 message="Alpha, chinese and number are supported!")]
+
+    title = forms.CharField(validators=title_regex, max_length=128, help_text="Please enter the title")
     url = forms.URLField(max_length=200, help_text="Please enter the URL")
     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 

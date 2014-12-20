@@ -147,7 +147,8 @@ def category(request, category_name_slug):
     context.update(dict(result_list=None, query=None))
 
     if request.method == "POST":
-        query = request.POST['query'].strip()
+        print request.POST
+        query = request.POST.get('query', None)
         if query:
             query = query.strip()
             result_list = run_query(query)
@@ -155,18 +156,16 @@ def category(request, category_name_slug):
     try:
         category = Category.objects.get(name=category_name_slug)
         pages = Page.objects.filter(category=category).order_by('-views')
-        print pages
         admin = Page.objects.get(category=Category.objects.get(name='Admin'))
-        print admin
 
         context.update(dict(category_name=category.name,
                             category=category,
                             pages=pages,
                             admin=admin,
                             profile=request.user,))
-        print context
     except Category.DoesNotExist:
         pass
+        # return render_to_response('404.html')
 
     if not context['query']:
         context.update(dict())
